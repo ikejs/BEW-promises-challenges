@@ -9,18 +9,35 @@
  *    `npm init` first.)
  * 
  * 
+ *              When calling makePromise(), a pending promise is returned
+ *              that will resolve after the 'request' module receives a
+ *              response from the server. If there is an error, the
+ *              the promise is rejected with the error message. If not,
+ *              the body of the API call is parsed for JSON. If err, 
+ *              reject err.
+ * 
+ * 
  * 2. Sometimes, when making API calls, we want to make a bunch of calls in
  *    parallel and don't care in what order they resolve. (In other words, they
  *    don't depend on each other.)
- * 
  *    Uncomment code block #2 and run the code. What happens? What advantages 
  *    does `Promise.all` give us when dealing with promises?
+ * 
+ * 
+ *              After uncommenting #2, Promise.all([...]) is invoked, all
+ *              three promises are resolved in order before looping over the
+ *              results to console.log() each one.
+ *              An advantage to using Promise.all() is that it allows multiple
+ *              promises to be passed in, rather than chaining many .then()s.
  * 
  * 
  * 3. Make another variable `planet1Promise` and assign to it the result of
  *    calling `makePromise` with the URL `https://swapi.co/api/planets/1`.
  *    Add it to the array passed to `Promise.all`, then print the name of the
  *    returned planet inside the `.then()` callback.
+ * 
+ * 
+ *              👍🏼
  * 
  * 
  *******************************************************************************
@@ -56,6 +73,8 @@ const person1Promise = makePromise('https://swapi.co/api/people/1')
 const person2Promise = makePromise('https://swapi.co/api/people/2')
 const person3Promise = makePromise('https://swapi.co/api/people/3')
 
+const planet1Promise = makePromise('https://swapi.co/api/planets/1')
+
 /* Uncomment me! #1 */
 // person1Promise.then(function(personResult) {
 //     console.log(`Resulting person's name: ${personResult.name}`);
@@ -65,13 +84,14 @@ const person3Promise = makePromise('https://swapi.co/api/people/3')
 // });
 
 /* Uncomment me! #2 */
-// Promise.all([person1Promise, person2Promise, person3Promise])
-//     .then(function(results) {
-//         for (let i = 0; i < 3; i++) {
-//             console.log(`Person ${i+1}'s name: ${results[i].name}`)
-//         }
-//     })
-//     .catch(function(err) {
-//         console.log('Got an error!')
-//         console.log(err)
-//     })
+Promise.all([person1Promise, person2Promise, person3Promise, planet1Promise])
+    .then(function(results) {
+        for (let i = 0; i < 3; i++) {
+            console.log(`Person ${i+1}'s name: ${results[i].name}`)
+        }
+        console.log(`Planet 1's name: ${results[3].name}`)
+    })
+    .catch(function(err) {
+        console.log('Got an error!')
+        console.log(err)
+    })
