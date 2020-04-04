@@ -8,8 +8,19 @@
  *    expectation was correct.
  * 
  * 
+ *            Hello there, Ducky
+ *            MAKE SCHOOL IS AWESOME!!!
+ * 
+ * 
  * 2. What happens if greet() fails? Make it fail by changing 'name' to a number
  *    instead of a string. What happens? Does uppercaser() still run?
+ * 
+ * 
+ *            When greeting, the program makes sure that typeof name === 'string'.
+ *            Since it is an int instead, the catch block will log 'Received an error!'
+ *            Then, we get the promise reject message 'Name must be a string!'
+ *            Since an error occured, the second .then() body will not be executed,
+ *            so the uppercaser() will not be called.
  * 
  * 
  * 3. What happens if greet() succeeds and uppercaser() fails? Modify your code
@@ -17,16 +28,20 @@
  *    run the code again.
  * 
  * 
+ *            After changing the type of my_str to an int, I was able to fire
+ *            off the promise reject for the uppercaser().
+ * 
+ * 
  * 4. Write a method that takes a string as input and returns the input string
  *    with a space added between each character. E.g. 'foo' -> 'f o o'
- * 
  *    Name this method spacer(str). It should run asynchronously, so use a 
  *    setTimeout() and return a Promise.
- * 
  *    Last, call spacer() after you call greeter() and uppercaser().
- * 
  *    Make sure you only have one catch() block. If you have more than one,
  *    refactor your code so that you only have one. 
+ * 
+ * 
+ *            👍🏼
  * 
  *******************************************************************************
  */
@@ -63,8 +78,18 @@ function uppercaser(str) {
     });
 }
 
-name = 'Ducky'
-my_str = 'Make School is Awesome!!!'
+
+const spacer = async (str) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(str.split('').join(' '));
+    }, 2000)
+  });
+}
+
+name = 'Ike';
+my_str = 'Make school is awesome!!!';
+str_to_space = 'I have spaces now.';
 
 greet(name)
     .then((greetResult) => {
@@ -73,7 +98,12 @@ greet(name)
     })
     .then((uppercaserResult) => {
         console.log(uppercaserResult)
-    }).catch((err) => {
+        return spacer(str_to_space);
+    })
+    .then((spacerResult) => {
+      console.log(spacerResult);
+    })
+    .catch((err) => {
         console.log('Received an error!')
         console.log(err);
     });
